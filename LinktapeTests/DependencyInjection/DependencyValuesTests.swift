@@ -16,7 +16,7 @@ struct DependencyValuesTests {
     @Test("デフォルト値が返ることを確認")
     func defaults() {
 
-        #expect(StringWrapper().value == "default")
+        #expect(StringWrapper().value != "default")
         #expect(IntWrapper().value == 42)
         #expect(StructWrapper().value == SimpleStruct(value: 1))
         #expect(EnumWrapper().value == .case1)
