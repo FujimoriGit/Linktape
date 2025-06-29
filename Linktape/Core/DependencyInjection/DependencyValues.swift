@@ -16,6 +16,8 @@ struct DependencyValues: Sendable {
     @TaskLocal static fileprivate var current = Self()
     private var storage: [ObjectIdentifier: any Sendable] = [:]
     
+    private init () {}
+    
     subscript<K>(key: K.Type) -> K.Value where K : DependencyKey {
         
         get {
