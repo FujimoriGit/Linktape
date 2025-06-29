@@ -68,7 +68,7 @@ jobs:
           xcodebuild
           -project Linktape.xcodeproj
           -configuration Debug
-          -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16 Pro'
+          -destination 'platform=iOS Simulator,arch=arm64,name=iPhone 16 Pro,OS=18.5'
           -scheme Linktape
           -skipPackagePluginValidation
           -skipMacroValidation
