@@ -1,0 +1,62 @@
+name: iOS CI
+
+# ----------------------------------------
+# トリガー条件
+# ----------------------------------------
+on:
+  push:
+    branches: ["*"]          # すべてのブランチでpushを検知
+  pull_request:
+    branches: ["*"]          # すべてのブランチでPRを検知
+
+jobs:
+  build-and-test:
+    # ----------------------------------------
+    # 実行条件：
+    #   - デフォルトブランチへの push
+    #   - または PR のとき
+    # ----------------------------------------
+    if: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
+
+    runs-on: macos-latest     # GitHub提供のmacOSランナーで実行
+
+    steps:
+      # ----------------------------------------
+      # 1. リポジトリのコードをチェックアウト
+      # ----------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      # ----------------------------------------
+      # 2. DerivedData（中間生成物）をキャッシュしてビルド時間を短縮
+      # ----------------------------------------
+      - name: Cache DerivedData
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-xcode-derived-${{ hashFiles('**/*.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-derived-
+
+      # ----------------------------------------
+      # 3. Xcodeのバージョンを自動でセットアップ
+      #    'latest-stable' を使えば常に最新安定版を使える
+      #    利用可能なバージョン一覧: https://github.com/actions/runner-images
+      # ----------------------------------------
+      - name: Setup Xcode (latest stable)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      # ----------------------------------------
+      # 4. ビルドとテストを実行
+      #    workspace / scheme 名はプロジェクトに合わせて変更してください
+      # ----------------------------------------
+      - name: Build and test
+        run: |
+          xcodebuild test \
+            -project Linktape.xcodeproj \  # ← .xcodeprojなら -project に変更
+            -scheme Linktape \          # ← スキーム名に変更
+            -destination 'platform=iOS Simulator,OS=18.,name=iPhone 16 Pro' \
+            -enableCodeCoverage YES \
+            | xcpretty
