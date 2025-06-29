@@ -18,7 +18,7 @@ jobs:
     # ----------------------------------------
     if: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
 
-    runs-on: macos-latest     # GitHub提供のmacOSランナーで実行
+    runs-on: macos-15     # GitHub提供のmacOSランナーで実行
 
     steps:
       # ----------------------------------------
