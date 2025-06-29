@@ -58,6 +58,6 @@ jobs:
           xcodebuild test \
             -project Linktape.xcodeproj \
             -scheme Linktape \
-            -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16 Pro' \
+            -destination 'platform=iOS Simulator,OS=18.2,name=iPhone 16 Pro' \
             -enableCodeCoverage YES \
             | xcpretty
