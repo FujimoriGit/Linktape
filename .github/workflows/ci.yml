@@ -55,8 +55,8 @@ jobs:
       - name: Build and test
         run: |
           xcodebuild test \
-            -project Linktape.xcodeproj \  # ← .xcodeprojなら -project に変更
-            -scheme Linktape \          # ← スキーム名に変更
+            -project Linktape.xcodeproj \
+            -scheme Linktape \
             -destination 'platform=iOS Simulator,OS=18.,name=iPhone 16 Pro' \
             -enableCodeCoverage YES \
             | xcpretty
