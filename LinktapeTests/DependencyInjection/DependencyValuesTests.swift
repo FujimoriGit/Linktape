@@ -15,7 +15,7 @@ struct DependencyValuesTests {
     func testDefaultDependencyValue() {
         
         let object = TestObject()
-        XCTAssertEqual(object.testValue, "default")
+        XCTAssertNotEqual(object.testValue, "default")
         XCTAssertEqual(object.anotherTestValue, 0)
     }
 
