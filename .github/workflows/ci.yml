@@ -13,7 +13,7 @@ jobs:
   build-and-test:
     # デフォルトブランチへの push または PR のときに実行
     if: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
-    runs-on: macos-15     # GitHub提供のmacOSランナーで実行
+    runs-on: macos-latest
 
     steps:
       # 1. リポジトリをチェックアウト
@@ -43,8 +43,15 @@ jobs:
             -resolvePackageDependencies
 
       # 5. SwiftLint プラグイン実行
-      - name: Lint via SwiftLint BuildTool Plugin
-        run: swift package plugin run SwiftLintBuildToolPlugin --target Linktape
+      - name: Build (with SwiftLint)
+        run: |
+          xcodebuild build \
+            -project Linktape.xcodeproj \
+            -scheme Linktape \
+            -destination 'platform=iOS Simulator,OS=18.0,name=iPhone 16 Pro' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+          | xcpretty
 
       # 6. ビルド ＆ テスト
       - name: Build and test
