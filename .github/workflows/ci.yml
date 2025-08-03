@@ -5,31 +5,29 @@ name: iOS CI
 # ----------------------------------------
 on:
   push:
-    branches: ["*"]          # すべてのブランチでpushを検知
+    branches: ["*"]
   pull_request:
-    branches: ["*"]          # すべてのブランチでPRを検知
+    branches: ["*"]
+   
+# ----------------------------------------
+# 環境変数
+# ----------------------------------------
+env:
+  # チェックアウト
+  DEVELOPER_DIR: /Applications/Xcode_16.4.app
 
 jobs:
   build-and-test:
-    # ----------------------------------------
-    # 実行条件：
-    #   - デフォルトブランチへの push
-    #   - または PR のとき
-    # ----------------------------------------
+    # デフォルトブランチへの push または PR のときに実行
     if: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
-
-    runs-on: macos-latest     # GitHub提供のmacOSランナーで実行
+    runs-on: macos-latest
 
     steps:
-      # ----------------------------------------
-      # 1. リポジトリのコードをチェックアウト
-      # ----------------------------------------
+      # 1. リポジトリをチェックアウト
       - name: Checkout code
         uses: actions/checkout@v4.2.2
 
-      # ----------------------------------------
-      # 2. DerivedData（中間生成物）をキャッシュしてビルド時間を短縮
-      # ----------------------------------------
+      # 2. DerivedData をキャッシュ
       - name: Cache DerivedData
         uses: actions/cache@v4.2.3
         with:
@@ -38,25 +36,30 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-xcode-derived-
 
-      # ----------------------------------------
-      # 3. Xcodeのバージョンを自動でセットアップ
-      #    'latest-stable' を使えば常に最新安定版を使える
-      #    利用可能なバージョン一覧: https://github.com/actions/runner-images
-      # ----------------------------------------
-      - name: Setup Xcode (latest stable)
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
+      # 3. Xcodeの一覧出力
+      - name: Show Xcode list
+        run: ls /Applications | grep 'Xcode'
+      # Xcodeのバージョン選択
+      - name: Select Xcode version
+        run: sudo xcode-select -s '${{ env.DEVELOPER_DIR }}/Contents/Developer'
 
-      # ----------------------------------------
-      # 4. ビルドとテストを実行
-      #    workspace / scheme 名はプロジェクトに合わせて変更してください
-      # ----------------------------------------
+      # 4. SPM 依存解決（Moya など）
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild \
+            -project Linktape.xcodeproj \
+            -resolvePackageDependencies
+
+      # 5. SwiftLint プラグイン実行
+      - name: Lint via SwiftLint BuildTool Plugin
+        run: swift package plugin run SwiftLintBuildToolPlugin --target Linktape
+
+      # 6. ビルド ＆ テスト
       - name: Build and test
         run: |
           xcodebuild test \
             -project Linktape.xcodeproj \
             -scheme Linktape \
-            -destination 'platform=iOS Simulator,OS=18.,name=iPhone 16 Pro' \
+            -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16 Pro' \
             -enableCodeCoverage YES \
-            | xcpretty
+          | xcpretty
