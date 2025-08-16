@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		D9E9AA8C2E3F6D2600976E8B /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = D9E9AA8B2E3F6D2600976E8B /* Moya */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		D9E24BF42E114C8500FC5331 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -56,7 +52,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9E9AA8C2E3F6D2600976E8B /* Moya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +112,6 @@
 			);
 			name = Linktape;
 			packageProductDependencies = (
-				D9E9AA8B2E3F6D2600976E8B /* Moya */,
 			);
 			productName = Linktape;
 			productReference = D9E24BE62E114C8300FC5331 /* Linktape.app */;
@@ -202,7 +196,6 @@
 			mainGroup = D9E24BDD2E114C8300FC5331;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				D9E9AA8A2E3F6D2600976E8B /* XCRemoteSwiftPackageReference "Moya" */,
 				D9E9AA8D2E3F6E0000976E8B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -566,14 +559,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D9E9AA8A2E3F6D2600976E8B /* XCRemoteSwiftPackageReference "Moya" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Moya/Moya.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 15.0.3;
-			};
-		};
 		D9E9AA8D2E3F6E0000976E8B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -583,14 +568,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		D9E9AA8B2E3F6D2600976E8B /* Moya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D9E9AA8A2E3F6D2600976E8B /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = Moya;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D9E24BDE2E114C8300FC5331 /* Project object */;
 }
